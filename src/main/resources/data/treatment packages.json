@@ -1,0 +1,46 @@
+{
+  "packages": [
+    {
+      "title": "Paket Shafwah 1",
+      "price": 150000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [24,22]
+    },
+    {
+      "title": "Paket Shafwah 2",
+      "price": 185000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [10,36,38]
+    },
+    {
+      "title": "Paket Shafwah 3",
+      "price": 190000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [24,22,10]
+    },
+    {
+      "title": "Paket Shafwah 4",
+      "price": 195000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [20,12,38]
+    },
+    {
+      "title": "Paket Shafwah 5",
+      "price": 195000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [36,39,40]
+    },
+    {
+      "title": "Paket Shafwah 6",
+      "price": 250000,
+      "active": true,
+      "categoryId": 6,
+      "treatmentIds": [38,10,22,20]
+    }
+  ]
+}

@@ -1,0 +1,379 @@
+{
+  "treatments": [
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Gunting rambut",
+      "active": true,
+      "priceType":"Fixed",
+      "prices": [20000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Gunting Blow Dry",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [25000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Gunting Cuci Blow Dry",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [35000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Poni",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [15000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Cuci Blow Dry",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [25000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Curly / Blow Tarik",
+      "active": true,
+      "priceType": "Range",
+      "prices": [50000, 75000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Catok + Vitamin",
+      "active": true,
+      "priceType": "Option",
+      "prices": [40000, 55000, 75000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Creambath Anak (2-7 tahun)",
+      "active": true,
+      "priceType": "Option",
+      "prices": [40000, 50000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Creambath A Plus Pijat Bahu Dada",
+      "active": true,
+      "priceType": "Option",
+      "prices": [60000, 65000, 70000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Creambath B",
+      "active": true,
+      "priceType": "Option",
+      "prices": [50000, 55000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Hair Spa A, Plus Pijat Bahu Dada",
+      "active": true,
+      "priceType": "Option",
+      "prices": [70000, 75000, 80000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Hair Spa B",
+      "active": true,
+      "priceType": "Option",
+      "prices": [65000, 75000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Hair Mask Natural Non Pijat",
+      "active": true,
+      "priceType": "Option",
+      "prices": [60000, 65000, 75000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Hair Mask Keratin/Matrix Non Pijat",
+      "active": true,
+      "priceType": "Option",
+      "prices": [100000, 110000, 125000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Cat Rambut",
+      "active": true,
+      "priceType": "Range",
+      "prices": [90000, 300000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Bleaching Rambut",
+      "active": true,
+      "priceType": "Range",
+      "prices": [150000, 350000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Smoothing (Offer Tebal, Panjang + 100)",
+      "active": true,
+      "priceType": "Range",
+      "prices": [250000, 500000]
+    },
+    {
+      "id": -1,
+      "categoryId": 2,
+      "title": "Therapy Oxygen Rambut",
+      "active": true,
+      "priceType": "Range",
+      "prices": [150000, 200000]
+    },
+
+
+
+
+
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Pijat Tangan",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [15000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Ratus V",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [40000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Kerik Badan",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [30000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Lulur (Body Scrub)",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [85000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Masker Badan",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [80000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Full Body Massage",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [85000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Bleaching Badan",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [100000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Pedicure + Spa Kaki + Vitamin Kuku",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [80000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Manicure + Massage Jari + Vitamin Kuku",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [60000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Paket Manicure + Pedicure + Vit",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [130000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Body Steam/Sauna (+ Rempah 10k)",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [35000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Makeup Simple/Wisuda, Mulai dari",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [200000]
+    },
+    {
+      "id": -1,
+      "categoryId": 3,
+      "title": "Menyewakan Baju Kartinian, Mulai Dari",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [80000]
+    },
+
+
+
+
+
+    {
+      "id": -1,
+      "categoryId": 4,
+      "title": "Only Mask Acne",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [45000]
+    },
+    {
+      "id": -1,
+      "categoryId": 4,
+      "title": "Facial Acne, Tea Tree Oil",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [95000]
+    },
+    {
+      "id": -1,
+      "categoryId": 4,
+      "title": "Facial Oxy Acne",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [125000]
+    },
+    {
+      "id": -1,
+      "categoryId": 4,
+      "title": "Facial Laser IPL Acne",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [150000]
+    },
+
+
+
+
+
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Totok Aura Wajah",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [50000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Paket Masker + Totok Aura Wajah",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [65000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial Whitening",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [95000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial Detox Glow",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [125000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial Oxy Glow",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [125000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial Microdermabrasi",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [125000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial IPL Rejuve",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [150000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial RF/Lifting",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [150000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial Dermapen + Soft Peel",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [185000]
+    },
+    {
+      "id": -1,
+      "categoryId": 5,
+      "title": "Facial CC Glow",
+      "active": true,
+      "priceType": "Fixed",
+      "prices": [240000]
+    }
+  ]
+}
