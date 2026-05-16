@@ -80,12 +80,17 @@ class CustomerService(
     }
 
     fun create(customer: Customer): ResponseEntity<ApiResponse<Customer>> {
-        customerRepository.save(customer)
+        val newCustomer = customer.copy(
+            id = 0,
+            visitCount = 0,
+            totalVisitCount = 0
+        )
+        val saved = customerRepository.save(newCustomer)
 
         return ResponseEntity.ok(ApiResponse(
             success = true,
-            message = "Customer ${customer.name} created successfully!",
-            data = customer
+            message = "Customer ${saved.name} created successfully!",
+            data = saved
         ))
     }
 
@@ -105,6 +110,7 @@ class CustomerService(
             name = updated.name,
             phoneNumber = updated.phoneNumber,
             address = updated.address,
+            birthDate = updated.birthDate,
             visitCount = updated.visitCount,
             totalVisitCount = updated.totalVisitCount,
             lastVisitDate = updated.lastVisitDate

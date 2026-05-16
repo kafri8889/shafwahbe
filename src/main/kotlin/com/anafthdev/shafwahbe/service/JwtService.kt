@@ -29,6 +29,7 @@ class JwtService(
         return Jwts.builder()
             .setSubject(employee.username)
             .claim("role", employee.role.name)
+            .claim("accessRole", employee.accessRole.name)
             .setIssuedAt(Date(now))
             .setExpiration(Date(now + expirationMs))
             .signWith(secretKey)

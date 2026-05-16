@@ -32,6 +32,9 @@ data class Customer(
     @Column(nullable = true)
     val address: String = "",
 
+    @Column(nullable = true)
+    val birthDate: LocalDate? = null,
+
     @Column(nullable = false)
     val visitCount: Int = 0,
 

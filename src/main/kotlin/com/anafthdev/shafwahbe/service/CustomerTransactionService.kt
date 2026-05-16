@@ -128,10 +128,15 @@ class CustomerTransactionService(
 
         val trimmedPhone = customerReq.phoneNumber.trim()
         val customerToUse =
-            if (existingCustomer.name != customerReq.name || existingCustomer.phoneNumber != trimmedPhone) {
+            if (
+                existingCustomer.name != customerReq.name ||
+                existingCustomer.phoneNumber != trimmedPhone ||
+                existingCustomer.birthDate != customerReq.birthDate
+            ) {
                 val updatedCustomer = existingCustomer.copy(
                     name = customerReq.name,
-                    phoneNumber = trimmedPhone
+                    phoneNumber = trimmedPhone,
+                    birthDate = customerReq.birthDate ?: existingCustomer.birthDate
                 )
                 customerRepository.save(updatedCustomer)
             } else existingCustomer
@@ -282,6 +287,7 @@ class CustomerTransactionService(
             if (existing != null) {
                 val updated = existing.copy(
                     name = req.name,
+                    birthDate = req.birthDate ?: existing.birthDate,
                     lastVisitDate = txDate,
                     visitCount = existing.visitCount + 1,
                     totalVisitCount = existing.totalVisitCount + 1
@@ -294,6 +300,7 @@ class CustomerTransactionService(
                 name = req.name,
                 phoneNumber = phone,
                 address = "-",
+                birthDate = req.birthDate,
                 visitCount = 1,
                 totalVisitCount = 1,
                 lastVisitDate = txDate
