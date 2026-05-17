@@ -160,9 +160,9 @@ class CustomerTransactionService(
                 .body(ApiResponse(success = false, message = "Legacy transaction amount must be greater than zero."))
         }
 
-        if (request.commissionPercent !in setOf(5.0, 10.0, 15.0)) {
+        if (request.commissionPercent !in setOf(5.0, 10.0, 15.0, 100.0)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse(success = false, message = "Legacy commission must be 5, 10, or 15 percent."))
+                .body(ApiResponse(success = false, message = "Legacy commission must be 5, 10, 15, or 100 percent."))
         }
 
         val employee = staffRepository.findByIdOrNull(request.employeeId)
