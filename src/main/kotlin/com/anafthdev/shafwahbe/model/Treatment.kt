@@ -1,6 +1,7 @@
 package com.anafthdev.shafwahbe.model
 
 import com.anafthdev.shafwahbe.enums.PriceType
+import com.anafthdev.shafwahbe.enums.StaffCommissionType
 import com.anafthdev.shafwahbe.util.converters.DoubleListConverter
 import com.anafthdev.shafwahbe.util.converters.StringListConverter
 import jakarta.persistence.Column
@@ -44,5 +45,12 @@ data class Treatment(
     @Column(columnDefinition = "TEXT")
     @Convert(converter = DoubleListConverter::class)
     val prices: List<Double> = listOf(),
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    val staffCommissionType: StaffCommissionType = StaffCommissionType.PERCENTAGE,
+
+    @Column(nullable = false)
+    val staffCommissionValue: Double = 0.0
 )
 

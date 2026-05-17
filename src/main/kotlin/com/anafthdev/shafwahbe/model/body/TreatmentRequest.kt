@@ -1,6 +1,7 @@
 package com.anafthdev.shafwahbe.model.body
 
 import com.anafthdev.shafwahbe.enums.PriceType
+import com.anafthdev.shafwahbe.enums.StaffCommissionType
 
 data class TreatmentRequest(
     val id: Long,
@@ -9,6 +10,8 @@ data class TreatmentRequest(
     val active: Boolean,
     val priceType: PriceType,
     val prices: List<Double>,
+    val staffCommissionType: StaffCommissionType = StaffCommissionType.PERCENTAGE,
+    val staffCommissionValue: Double = 0.0
 )
 
 data class BatchTreatmentRequest(

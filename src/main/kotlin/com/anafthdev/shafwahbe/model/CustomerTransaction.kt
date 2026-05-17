@@ -3,10 +3,12 @@ package com.anafthdev.shafwahbe.model
 import com.anafthdev.shafwahbe.enums.PaymentMethod
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
+import jakarta.persistence.ConstraintMode
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
+import jakarta.persistence.ForeignKey
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -21,7 +23,7 @@ import java.time.LocalDateTime
  * Entitas untuk mencatat setiap transaksi treatment atau paket yang diambil pelanggan.
  *
  * @property customer Data customer
- * @property employee Employee yg menghandle
+ * @property employee Staff/stylist utama yg menghandle transaksi.
  * @property actualPrice Harga aktual yang dibayarkan untuk treatment/paket ini pada saat transaksi (bisa berbeda dari harga master jika ada diskon/penyesuaian).
  * @property notes Catatan tambahan spesifik untuk transaksi ini (misalnya, permintaan khusus pelanggan, kondisi saat treatment).
  * @property paymentMethod Metode pembayaran yang digunakan.
@@ -39,11 +41,14 @@ data class CustomerTransaction(
     val customer: Customer = Customer(),
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    val employee: Employee = Employee(),
+    @JoinColumn(name = "employee_id", nullable = false, foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    val employee: Staff = Staff(),
 
     @Column(nullable = false)
     val actualPrice: Double = 0.0,
+
+    @Column(nullable = false, columnDefinition = "DOUBLE PRECISION DEFAULT 0")
+    val voucherDiscountAmount: Double = 0.0,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

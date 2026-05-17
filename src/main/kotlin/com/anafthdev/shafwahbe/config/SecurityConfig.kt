@@ -30,6 +30,10 @@ class SecurityConfig(
                     // Endpoint publik (login, register, dll.)
                     .requestMatchers("/api/auth/**").permitAll()
 
+                    .requestMatchers(HttpMethod.GET, "/api/vouchers/member/**").authenticated()
+                    .requestMatchers("/api/vouchers/**").hasAnyAuthority("ACCESS_Admin", "ACCESS_SuperAdmin")
+                    .requestMatchers("/api/finance/**").hasAnyAuthority("ACCESS_Admin", "ACCESS_SuperAdmin")
+
                     // Endpoint yang perlu autentikasi
                     .requestMatchers("/api/employees/**").authenticated()
 

@@ -95,7 +95,9 @@ class TreatmentService(
             title = request.title,
             active = request.active,
             priceType = request.priceType,
-            prices = request.prices
+            prices = request.prices,
+            staffCommissionType = request.staffCommissionType,
+            staffCommissionValue = request.staffCommissionValue.coerceAtLeast(0.0)
         )
 
         treatmentRepository.save(treatment)
@@ -131,6 +133,8 @@ class TreatmentService(
                 active = it.active,
                 priceType = it.priceType,
                 prices = it.prices,
+                staffCommissionType = it.staffCommissionType,
+                staffCommissionValue = it.staffCommissionValue.coerceAtLeast(0.0)
             )
         }
 
@@ -173,7 +177,9 @@ class TreatmentService(
             prices = request.prices,
             active = request.active,
             priceType = request.priceType,
-            category = newCategory.get()
+            category = newCategory.get(),
+            staffCommissionType = request.staffCommissionType,
+            staffCommissionValue = request.staffCommissionValue.coerceAtLeast(0.0)
         )
 
         treatmentRepository.save(updated)

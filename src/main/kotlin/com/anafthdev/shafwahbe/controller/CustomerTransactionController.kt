@@ -3,6 +3,7 @@ package com.anafthdev.shafwahbe.controller
 import com.anafthdev.shafwahbe.enums.PaymentMethod
 import com.anafthdev.shafwahbe.model.CustomerTransaction
 import com.anafthdev.shafwahbe.model.body.CustomerTransactionRequest
+import com.anafthdev.shafwahbe.model.body.LegacyTransactionRequest
 import com.anafthdev.shafwahbe.model.response.ApiResponse
 import com.anafthdev.shafwahbe.service.CustomerTransactionService
 import org.springframework.format.annotation.DateTimeFormat
@@ -27,6 +28,10 @@ class CustomerTransactionController(
     @PostMapping
     fun createRecord(@RequestBody request: CustomerTransactionRequest): ResponseEntity<ApiResponse<CustomerTransaction>> =
         recordService.createRecord(request)
+
+    @PostMapping("/legacy")
+    fun createLegacyRecord(@RequestBody request: LegacyTransactionRequest): ResponseEntity<ApiResponse<CustomerTransaction>> =
+        recordService.createLegacyRecord(request)
 
     @PutMapping("/{id}")
     fun updateRecord(@PathVariable id: Long, @RequestBody request: CustomerTransactionRequest): ResponseEntity<ApiResponse<CustomerTransaction>> =

@@ -17,6 +17,8 @@ interface CustomerRepository : JpaRepository<Customer, Long> {
 
     fun findByTotalVisitCountBetween(min: Int, max: Int): List<Customer>
 
+    fun findFirstByNameIgnoreCase(name: String): Customer?
+
     @Query(
         "SELECT c FROM Customer c WHERE c.lastVisitDate BETWEEN :start AND :end"
     )

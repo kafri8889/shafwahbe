@@ -34,13 +34,11 @@ class CustomerService(
                 ))
         }
 
-        return ResponseEntity
-            .status(HttpStatus.FOUND)
-            .body(ApiResponse(
-                success = true,
-                message = "Customer with ID $id found.",
-                data = customer.get()
-            ))
+        return ResponseEntity.ok(ApiResponse(
+            success = true,
+            message = "Customer with ID $id found.",
+            data = customer.get()
+        ))
     }
 
     fun getByNameIgnoreCase(name: String): ResponseEntity<ApiResponse<List<Customer>>> {

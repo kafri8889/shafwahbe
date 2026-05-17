@@ -2,10 +2,12 @@ package com.anafthdev.shafwahbe.model
 
 import com.anafthdev.shafwahbe.enums.TreatmentType
 import jakarta.persistence.Column
+import jakarta.persistence.ConstraintMode
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
+import jakarta.persistence.ForeignKey
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -28,6 +30,10 @@ data class CustomerTransactionItem(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "treatment_package_id")
     val treatmentPackage: TreatmentPackage? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    val employee: Staff? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
