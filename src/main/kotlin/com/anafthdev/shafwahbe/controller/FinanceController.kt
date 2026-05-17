@@ -1,28 +1,17 @@
 package com.anafthdev.shafwahbe.controller
 
-import com.anafthdev.shafwahbe.model.body.CashReconciliationRequest
-import com.anafthdev.shafwahbe.model.body.FinanceCategoryRequest
-import com.anafthdev.shafwahbe.model.body.FinanceExpenseRequest
-import com.anafthdev.shafwahbe.model.body.MonthlyBudgetRequest
-import com.anafthdev.shafwahbe.model.body.RecurringExpenseRequest
+import com.anafthdev.shafwahbe.model.body.*
 import com.anafthdev.shafwahbe.service.FinanceService
+import com.anafthdev.shafwahbe.service.PayrollService
 import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/finance")
 class FinanceController(
-    private val financeService: FinanceService
+    private val financeService: FinanceService,
+    private val payrollService: PayrollService
 ) {
 
     @GetMapping("/categories")
@@ -91,4 +80,26 @@ class FinanceController(
     @PostMapping("/cash-reconciliations")
     fun createCashReconciliation(@RequestBody request: CashReconciliationRequest) =
         financeService.createCashReconciliation(request)
+
+    @GetMapping("/payroll")
+    fun getPayroll(@RequestParam(required = false) month: String?) = payrollService.getPayroll(month)
+
+    @GetMapping("/payroll/{staffId}")
+    fun getStaffPayroll(
+        @PathVariable staffId: Long,
+        @RequestParam(required = false) month: String?
+    ) = payrollService.getStaffPayroll(staffId, month)
+
+    @PutMapping("/payroll/{staffId}")
+    fun saveStaffPayroll(
+        @PathVariable staffId: Long,
+        @RequestParam(required = false) month: String?,
+        @RequestBody request: StaffPayrollRequest
+    ) = payrollService.saveStaffPayroll(staffId, month, request)
+
+    @PatchMapping("/payroll/{staffId}/pay")
+    fun payStaffPayroll(
+        @PathVariable staffId: Long,
+        @RequestParam(required = false) month: String?
+    ) = payrollService.payStaffPayroll(staffId, month)
 }

@@ -2,7 +2,12 @@ package com.anafthdev.shafwahbe.service
 
 import com.anafthdev.shafwahbe.model.Customer
 import com.anafthdev.shafwahbe.model.response.ApiResponse
+import com.anafthdev.shafwahbe.model.response.PagedResponse
 import com.anafthdev.shafwahbe.repository.CustomerRepository
+import com.anafthdev.shafwahbe.repository.spec.CustomerSpecifications
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -41,39 +46,48 @@ class CustomerService(
         ))
     }
 
-    fun getByNameIgnoreCase(name: String): ResponseEntity<ApiResponse<List<Customer>>> {
-        val customers = customerRepository.findByNameIgnoreCase(name)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${customers.size} customers with name (case insensitive) '$name'.",
-            data = customers
-        ))
-    }
+    /**
+     * Paginated, filterable customer list.
+     *
+     * @param search Free-text keyword applied to name, phone number, address, and birth date (case-insensitive LIKE).
+     * @param startDate Inclusive lower bound on `lastVisitDate` (date-only).
+     * @param endDate Inclusive upper bound on `lastVisitDate` (date-only).
+     * @param page 0-indexed page number.
+     * @param size Page size; clamped to [1..200].
+     * @param sort Comma-separated `field,direction` pair, e.g. `lastVisitDate,desc`.
+     */
+    fun getPaged(
+        search: String?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        page: Int,
+        size: Int,
+        sort: String
+    ): ResponseEntity<ApiResponse<PagedResponse<Customer>>> {
+        val safeSize = size.coerceIn(1, 200)
+        val safePage = page.coerceAtLeast(0)
+        val sortObj = parseSort(sort, defaultProperty = "lastVisitDate", defaultDirection = Sort.Direction.DESC)
 
-    fun getByVisitCountBetween(min: Int, max: Int): ResponseEntity<ApiResponse<List<Customer>>> {
-        val customers = customerRepository.findByVisitCountBetween(min, max)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${customers.size} customers with visit count between $min and $max.",
-            data = customers
-        ))
-    }
+        val spec: Specification<Customer> = Specification.where(CustomerSpecifications.search(search))
+            .and(CustomerSpecifications.lastVisitDateBetween(startDate, endDate))
 
-    fun getByTotalVisitCountBetween(min: Int, max: Int): ResponseEntity<ApiResponse<List<Customer>>> {
-        val customers = customerRepository.findByTotalVisitCountBetween(min, max)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${customers.size} customers with total visit count between $min and $max.",
-            data = customers
-        ))
-    }
+        val pageable = PageRequest.of(safePage, safeSize, sortObj)
+        val result = customerRepository.findAll(spec, pageable)
 
-    fun getByLastVisitDateBetween(start: LocalDate, end: LocalDate): ResponseEntity<ApiResponse<List<Customer>>> {
-        val customers = customerRepository.findByLastVisitDateBetween(start, end)
+        val body = PagedResponse(
+            content = result.content,
+            page = result.number,
+            size = result.size,
+            totalElements = result.totalElements,
+            totalPages = result.totalPages,
+            first = result.isFirst,
+            last = result.isLast
+        )
+
         return ResponseEntity.ok(ApiResponse(
             success = true,
-            message = "Found ${customers.size} customers with last visit date between $start and $end.",
-            data = customers
+            message = "Found ${result.totalElements} customers.",
+            data = body
         ))
     }
 
@@ -141,4 +155,17 @@ class CustomerService(
         ))
     }
 
+    /**
+     * Accepts strings like "lastVisitDate,desc", "name,asc", or just "name".
+     * Falls back to the supplied defaults when input is empty or malformed.
+     */
+    private fun parseSort(raw: String, defaultProperty: String, defaultDirection: Sort.Direction): Sort {
+        val parts = raw.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        if (parts.isEmpty()) return Sort.by(defaultDirection, defaultProperty)
+        val property = parts[0]
+        val direction = parts.getOrNull(1)?.let {
+            if (it.equals("asc", ignoreCase = true)) Sort.Direction.ASC else Sort.Direction.DESC
+        } ?: defaultDirection
+        return Sort.by(direction, property)
+    }
 }

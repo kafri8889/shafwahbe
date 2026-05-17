@@ -3,28 +3,16 @@ package com.anafthdev.shafwahbe.service
 import com.anafthdev.shafwahbe.enums.CashReconciliationStatus
 import com.anafthdev.shafwahbe.enums.ExpenseKind
 import com.anafthdev.shafwahbe.enums.PaymentMethod
-import com.anafthdev.shafwahbe.model.CashReconciliation
-import com.anafthdev.shafwahbe.model.FinanceCategory
-import com.anafthdev.shafwahbe.model.FinanceExpense
-import com.anafthdev.shafwahbe.model.MonthlyBudget
-import com.anafthdev.shafwahbe.model.RecurringExpense
-import com.anafthdev.shafwahbe.model.body.CashReconciliationRequest
-import com.anafthdev.shafwahbe.model.body.FinanceCategoryRequest
-import com.anafthdev.shafwahbe.model.body.FinanceExpenseRequest
-import com.anafthdev.shafwahbe.model.body.MonthlyBudgetRequest
-import com.anafthdev.shafwahbe.model.body.RecurringExpenseRequest
+import com.anafthdev.shafwahbe.model.*
+import com.anafthdev.shafwahbe.model.body.*
 import com.anafthdev.shafwahbe.model.response.ApiResponse
-import com.anafthdev.shafwahbe.repository.CashReconciliationRepository
-import com.anafthdev.shafwahbe.repository.CustomerTransactionRepository
-import com.anafthdev.shafwahbe.repository.FinanceCategoryRepository
-import com.anafthdev.shafwahbe.repository.FinanceExpenseRepository
-import com.anafthdev.shafwahbe.repository.MonthlyBudgetRepository
-import com.anafthdev.shafwahbe.repository.RecurringExpenseRepository
+import com.anafthdev.shafwahbe.repository.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalTime
 
 @Service
 class FinanceService(
@@ -250,7 +238,11 @@ class FinanceService(
     }
 
     private fun expectedCashForDate(date: LocalDate): Double {
-        val cashRevenue = transactionRepository.findByPaymentMethodAndDateBetween(PaymentMethod.CASH, date, date)
+        val cashRevenue = transactionRepository.findByPaymentMethodAndDateBetween(
+            PaymentMethod.CASH,
+            date.atStartOfDay(),
+            date.atTime(LocalTime.MAX)
+        )
             .sumOf { it.actualPrice }
         val cashExpenses = expenseRepository.findByPaymentMethodAndDateBetween(PaymentMethod.CASH, date, date)
             .sumOf { it.amount }

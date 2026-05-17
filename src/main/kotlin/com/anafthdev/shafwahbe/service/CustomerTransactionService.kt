@@ -1,30 +1,19 @@
 package com.anafthdev.shafwahbe.service
 
-import com.anafthdev.shafwahbe.enums.PaymentMethod
-import com.anafthdev.shafwahbe.enums.MemberVoucherStatus
-import com.anafthdev.shafwahbe.enums.PriceType
-import com.anafthdev.shafwahbe.enums.StaffCommissionType
-import com.anafthdev.shafwahbe.enums.TreatmentType
-import com.anafthdev.shafwahbe.enums.VoucherDiscountType
-import com.anafthdev.shafwahbe.model.Customer
-import com.anafthdev.shafwahbe.model.CustomerTransaction
-import com.anafthdev.shafwahbe.model.CustomerTransactionItem
-import com.anafthdev.shafwahbe.model.MemberVoucher
-import com.anafthdev.shafwahbe.model.Treatment
-import com.anafthdev.shafwahbe.model.TreatmentCategory
+import com.anafthdev.shafwahbe.enums.*
+import com.anafthdev.shafwahbe.model.*
 import com.anafthdev.shafwahbe.model.body.CustomerTransactionItemRequest
 import com.anafthdev.shafwahbe.model.body.CustomerTransactionRequest
 import com.anafthdev.shafwahbe.model.body.LegacyTransactionRequest
 import com.anafthdev.shafwahbe.model.body.SimpleCustomerRequest
 import com.anafthdev.shafwahbe.model.response.ApiResponse
-import com.anafthdev.shafwahbe.repository.CustomerRepository
-import com.anafthdev.shafwahbe.repository.CustomerTransactionRepository
-import com.anafthdev.shafwahbe.repository.MemberVoucherRepository
-import com.anafthdev.shafwahbe.repository.StaffRepository
-import com.anafthdev.shafwahbe.repository.TreatmentCategoryRepository
-import com.anafthdev.shafwahbe.repository.TreatmentPackageRepository
-import com.anafthdev.shafwahbe.repository.TreatmentRepository
-import org.springframework.data.repository.findByIdOrNull // Ekstensi Kotlin
+import com.anafthdev.shafwahbe.model.response.PagedResponse
+import com.anafthdev.shafwahbe.repository.*
+import com.anafthdev.shafwahbe.repository.spec.CustomerTransactionSpecifications
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -304,76 +293,68 @@ class CustomerTransactionService(
         ))
     }
 
-    fun getRecordsByCustomerId(customerId: Long): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByCustomerId(customerId)
+    /**
+     * Paginated, filterable transaction list.
+     *
+     * All filter params are optional; combinable via JPA Specification.
+     *
+     * @param startDate Inclusive lower bound on transaction `date` (date-only).
+     * @param endDate Inclusive upper bound on transaction `date` (date-only).
+     * @param customerId Restrict to a single customer.
+     * @param employeeId Restrict to a single staff/stylist.
+     * @param paymentMethod Restrict to a single payment method.
+     * @param page 0-indexed page number.
+     * @param size Page size; clamped to [1..200].
+     * @param sort Comma-separated `field,direction`, defaults to `date,desc`.
+     */
+    fun getPagedRecords(
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        customerId: Long?,
+        employeeId: Long?,
+        paymentMethod: PaymentMethod?,
+        page: Int,
+        size: Int,
+        sort: String
+    ): ResponseEntity<ApiResponse<PagedResponse<CustomerTransaction>>> {
+        val safeSize = size.coerceIn(1, 200)
+        val safePage = page.coerceAtLeast(0)
+        val sortObj = parseSort(sort, defaultProperty = "date", defaultDirection = Sort.Direction.DESC)
+
+        val spec: Specification<CustomerTransaction> =
+            Specification.where(CustomerTransactionSpecifications.dateBetween(startDate, endDate))
+                .and(CustomerTransactionSpecifications.customerId(customerId))
+                .and(CustomerTransactionSpecifications.employeeId(employeeId))
+                .and(CustomerTransactionSpecifications.paymentMethod(paymentMethod))
+
+        val pageable = PageRequest.of(safePage, safeSize, sortObj)
+        val result = recordRepository.findAll(spec, pageable)
+
+        val body = PagedResponse(
+            content = result.content,
+            page = result.number,
+            size = result.size,
+            totalElements = result.totalElements,
+            totalPages = result.totalPages,
+            first = result.isFirst,
+            last = result.isLast
+        )
+
         return ResponseEntity.ok(ApiResponse(
             success = true,
-            message = "Found ${records.size} records for customer ID $customerId.",
-            data = records
+            message = "Found ${result.totalElements} transactions.",
+            data = body
         ))
     }
 
-    fun getRecordsByEmployeeIdAndDateBetween(employeeId: Long, startDate: LocalDate, endDate: LocalDate): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByEmployeeIdAndDateBetween(employeeId, startDate, endDate)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records for employee ID $employeeId between $startDate and $endDate.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByDateBetween(startDate: LocalDate, endDate: LocalDate): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByDateBetween(startDate, endDate)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records between $startDate and $endDate.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByCustomerIdAndDateBetween(customerId: Long, startDate: LocalDate, endDate: LocalDate): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByCustomerIdAndDateBetween(customerId, startDate, endDate)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records for customer ID $customerId between $startDate and $endDate.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByEmployeeId(employeeId: Long): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByEmployeeId(employeeId)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records for employee ID $employeeId.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByPaymentMethod(paymentMethod: PaymentMethod): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByPaymentMethod(paymentMethod)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records with payment method ${paymentMethod.name}.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByPaymentMethodAndDateBetween(paymentMethod: PaymentMethod, startDate: LocalDate, endDate: LocalDate): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByPaymentMethodAndDateBetween(paymentMethod, startDate, endDate)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records with payment method ${paymentMethod.name} between $startDate and $endDate.",
-            data = records
-        ))
-    }
-
-    fun getRecordsByCustomerIdAndEmployeeIdAndDateBetween(customerId: Long, employeeId: Long, startDate: LocalDate, endDate: LocalDate): ResponseEntity<ApiResponse<List<CustomerTransaction>>> {
-        val records = recordRepository.findByCustomerIdAndEmployeeIdAndDateBetween(customerId, employeeId, startDate, endDate)
-        return ResponseEntity.ok(ApiResponse(
-            success = true,
-            message = "Found ${records.size} records for customer ID $customerId, employee ID $employeeId between $startDate and $endDate.",
-            data = records
-        ))
+    private fun parseSort(raw: String, defaultProperty: String, defaultDirection: Sort.Direction): Sort {
+        val parts = raw.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        if (parts.isEmpty()) return Sort.by(defaultDirection, defaultProperty)
+        val property = parts[0]
+        val direction = parts.getOrNull(1)?.let {
+            if (it.equals("asc", ignoreCase = true)) Sort.Direction.ASC else Sort.Direction.DESC
+        } ?: defaultDirection
+        return Sort.by(direction, property)
     }
 
     private fun resolveCustomerForCreate(req: SimpleCustomerRequest, txDate: LocalDateTime): Customer? {
